@@ -1,3 +1,4 @@
 /vendor/
 /credentials/
 composer.lock
+/tests/cache/
