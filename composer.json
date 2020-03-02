@@ -1,6 +1,6 @@
 {
-    "name": "grosv/laravel-package-template",
-    "description": "A repository template for Laravel packages",
+    "name": "grosv/eloquent-sheets",
+    "description": "Eloquent models backed by Google Sheets",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,14 +13,17 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.3",
-        "illuminate/support": "^6.0|^7.0"
+        "illuminate/support": "^6.0|^7.0",
+        "revolution/laravel-google-sheets": "^5.0",
+        "calebporzio/sushi": "^1.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^4.6"
     },
     "autoload": {
         "psr-4": {
-            "Grosv\\LaravelPackageTemplate\\": "src/"
+            "Grosv\\EloquentSheets\\": "src/"
         }
     },
     "autoload-dev": {
@@ -31,7 +34,7 @@
     },
     "extra": {
         "laravel": {
-            "providers": "Grosv\\LaravelPackageTemplate\\LaravelPackageTemplateProvider"
+            "providers": "Grosv\\EloquentSheets\\EloquentSheetsProvider"
         }
     }
 }

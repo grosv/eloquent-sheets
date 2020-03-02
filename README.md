@@ -1,18 +1,40 @@
-# Laravel Package Repository Template
-A bare bones respository template for developing Laravel packages.
-### How To Use
-Use the green "Use this template" button above to create a new repository based on this repo. You'll get a fresh repository reflecting the code as it is right now in this repo, but with a fresh commit history.
+# Eloquent Models for your Google Sheets
+### A package that lets you lay Eloquent on top of a Google Sheet.
 
-After you've done that, you have some editing / refactoring to do. Depending on your IDE the instructions and difficulty of this will vary a bit. But however you accomplish them, here are your steps:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/grosv/laravel-passwordless-login.svg?style=flat-square)](https://packagist.org/packages/grosv/laravel-passwordless-login)
+[![StyleCI](https://github.styleci.io/repos/243858945/shield?branch=master)](https://github.styleci.io/repos/243858945)
+![Build Status](https://app.chipperci.com/projects/8c76f67e-e513-46a3-ad7a-aecb136dfa05/status/master)
 
-1. Edit composer.json to change the vendor/packagename line, the description, the author name, and the author email. Also update the autoload blocks to reflect your vendor namespace and package name.
+### Installation
+```shell script
+composer require grosv/eloquent-sheets
+```
 
-2. Rename LaravelPackageTemplateProvider.php to be {YourPackageName}Provider.php and change the class name inside to match. Change the namespace to match your vendor namespace.
+### Configuration
+This package relies on [revolution/laravel-google-sheets](https://github.com/kawax/laravel-google-sheets). You must handle the configuration for that package and its dependencies for this package to work. Follow the instructions in their readme (though you can skip the compoer require bit because I do that already in here).
 
-3. Go to tests/TestCase and change the name of the loaded service provider to match your package name.
+### Usage
+Create a model for your Google sheet that extends Grosv\EloquentSheets\SheetModel. Here is the bare bones requirement to make it work:
+```php
+use Grosv\EloquentSheets\SheetModel;
 
-4. Run the tests. There should be one test and it should pass. If that happens, you know you at least haven't broken the test setup and should be ready to start building something great.
+class YourGoogleSheetsModel extends SheetModel
+{
+    protected $spreadsheetId = '1HxNqqLtc614UVLoTLEItfvcdcOm3URBEM2Zkr36Z1rE'; // The id of the spreadsheet
+    protected $sheetId = '0'; // The id of the sheet within the spreadsheet (gid=xxxxx on the URL)
+    protected $headerRow = '1'; // The row containing the names of your columns (eg. id, name, email, phone)
+    public $cacheId = '39e93f4d-c20e-4874-88ee-2ddc403bd3de'; // A uuid that is used as a cache key
+}
+```
+
+### What's Missing
+This works as it is but you have to do a great deal of work to set it up. Here are the missing pieces that I'll be adding over the next few days:
+
+1. An artisan command to create your model and interactively populate the required data.
+
+2. A Google Apps Script that you'll be able to use to have your sheet tell your site when its data has changed so that the cache can be forgotten and fresh data pulled from the sheet.
+
+3. Eventually I'd like to add insert and update methods that will let you append rows to your spreadsheet and edit existing rows.
 
 ### Acknowledgements
-
-I started off writing packages with the help of Marcel Pociot's excellent [Laravel Package Boilerplate](https://laravelpackageboilerplate.com/#/) and I purchased and used his course on package development. Without those two things I'd never have gotten to be nearly as proficient in package develpment as I am. If you are just starting out, I strongly recommend using those vs using this template or starting from scratch.
+This package wouldn't be possible without [Sushi](https://calebporzio/sushi) by Caleb Porzio. If you're not [sponsoring him on GitHub](https://github.com/sponsors/calebporzio) you should.
