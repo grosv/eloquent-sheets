@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Grosv\EloquentSheets\Models;
 
 use Grosv\EloquentSheets\SheetModel;
