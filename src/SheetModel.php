@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Grosv\EloquentSheets;
 
 use Google_Client;
@@ -12,7 +11,6 @@ use Sushi\Sushi;
 
 class SheetModel extends Model
 {
-
     use Sushi;
 
     protected $rows = [];
@@ -29,14 +27,13 @@ class SheetModel extends Model
     {
         parent::__construct();
         $this->cacheDirectory = realpath(config('sushi.cache-path', storage_path('framework/cache')));
-        $this->cacheFile = $this->cacheDirectory . '/' . $this->cacheId . '.json';
+        $this->cacheFile = $this->cacheDirectory.'/'.$this->cacheId.'.json';
     }
 
     public function getRows()
     {
         return File::exists($this->cacheFile) ? json_decode(File::get($this->cacheFile), true) : $this->loadFromSheet();
     }
-
 
     public function loadFromSheet(): array
     {
@@ -52,7 +49,7 @@ class SheetModel extends Model
 
         $rows = collect([]);
 
-        $sheet->each(function($row) use ($headers, $rows) {
+        $sheet->each(function ($row) use ($headers, $rows) {
             $rows->push($headers->combine($row));
         });
 
@@ -61,6 +58,5 @@ class SheetModel extends Model
         $this->cacheCreated = true;
 
         return $rows->toArray();
-
     }
 }

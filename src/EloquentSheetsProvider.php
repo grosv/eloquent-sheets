@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Grosv\EloquentSheets;
-
 
 use Illuminate\Support\ServiceProvider;
 
