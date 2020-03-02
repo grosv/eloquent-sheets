@@ -1,9 +1,9 @@
 # Eloquent Models for your Google Sheets
 ### A package that lets you lay Eloquent on top of a Google Sheet.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/grosv/laravel-passwordless-login.svg?style=flat-square)](https://packagist.org/packages/grosv/laravel-passwordless-login)
-[![StyleCI](https://github.styleci.io/repos/243858945/shield?branch=master)](https://github.styleci.io/repos/243858945)
-![Build Status](https://app.chipperci.com/projects/8c76f67e-e513-46a3-ad7a-aecb136dfa05/status/master)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/grosv/eloquent-sheets.svg?style=flat-square)](https://packagist.org/packages/grosv/eloquent-sheets)
+[![StyleCI](https://github.styleci.io/repos/244386505/shield?branch=master)](https://github.styleci.io/repos/244386505)
+![Build Status](https://app.chipperci.com/projects/65d88e3d-ecf4-4ced-afd3-e5ba3593ce21/status/master)
 
 ### Installation
 ```shell script
