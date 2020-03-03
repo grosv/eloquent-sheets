@@ -14,7 +14,7 @@ class EloquentSheetsProvider extends ServiceProvider
         $this->commands([
             MakeSheetModelCommand::class,
         ]);
-        Config::set('google-sheets.app_path', app_path());
+        Config::set('eloquent-sheets.app_path', app_path());
     }
 
     public function register(): void
