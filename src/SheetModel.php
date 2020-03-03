@@ -5,7 +5,6 @@ namespace Grosv\EloquentSheets;
 use Google_Client;
 use Google_Service_Sheets;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Revolution\Google\Sheets\Sheets;
 use Sushi\Sushi;
@@ -37,8 +36,6 @@ class SheetModel extends Model
     {
         unlink(config('sushi.cache-path').'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite');
     }
-
-
 
     public function loadFromSheet(): array
     {
