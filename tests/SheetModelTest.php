@@ -20,26 +20,27 @@ class SheetModelTest extends TestCase
     {
         parent::setUp();
         config(['sushi.cache-path' => $this->cachePath = __DIR__.'/cache']);
+
     }
 
     /** @test */
     public function can_read_from_google_sheets()
     {
+        File::cleanDirectory(config('sushi.cache-path'));
+        $this->assertFileNotExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
         $sheet = new TestModel();
-        File::cleanDirectory($this->cachePath);
-        $this->assertFileNotExists($sheet->cacheFile);
         $this->assertIsArray($sheet->getRows());
-        $this->assertTrue($sheet->cacheCreated);
-        $this->assertFileExists($sheet->cacheFile);
     }
 
     /** @test */
-    public function does_not_hit_google_sheets_if_json_exists()
+    public function does_not_hit_google_sheets_if_cache_exists()
     {
         $sheet = new TestModel();
-        $this->assertFileExists($sheet->cacheFile);
-        $this->assertFalse($sheet->cacheCreated);
-        $this->assertIsArray($sheet->getRows());
+        $this->assertFileExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
+        $this->assertStringContainsString(
+            'tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite',
+            $sheet->getConnection()->getDatabaseName()
+        );
     }
 
     /** @test */
@@ -53,15 +54,27 @@ class SheetModelTest extends TestCase
 
         $sheet = TestModel::where('name', 'Milo')->first();
         $this->assertEquals('Kid', $sheet->title);
+
     }
 
     /** @test */
-    public function can_forget_sheet_when_update_notification_comes_in()
+    public function can_invalidate_cache()
     {
         $sheet = TestModel::find(1);
-        $this->assertFileExists($sheet->cacheFile);
-        $response = $this->get('/eloquent_sheets_forget/'.$sheet->cacheId);
+        $this->assertFileExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
+        $sheet->invalidateCache();
+        $this->assertFileNotExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
+        $sheet = TestModel::find(2);
+        $this->assertEquals('Justine', $sheet->name);
+    }
+
+    /** @test */
+    public function can_invalidate_cache_by_request()
+    {
+        $sheet = TestModel::find(1);
+        $this->assertFileExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
+        $response = $this->get('/eloquent_sheets_forget/'.$sheet->cacheName);
         $response->assertSuccessful();
-        $this->assertFileNotExists($sheet->cacheFile);
+        $this->assertFileNotExists('tests/cache/sushi-grosv-eloquent-sheets-models-test-model.sqlite');
     }
 }
