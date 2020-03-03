@@ -43,11 +43,14 @@ class MakeSheetModelCommand extends Command
         $this->fullyQualfiedModelName = $this->modelNamespace.'\\'.$this->modelName;
         $this->modelPath .= '/'.$this->modelName.'.php';
         $this->calculateForgetUri();
-        if (!$this->confirm('Ready to write model '.$this->fullyQualfiedModelName.' at '.$this->modelPath.'?')) {
+
+
+        if (!$this->confirm('Ready to write model '. $this->fullyQualfiedModelName . ' at ' . $this->modelPath . '?')) {
             return;
         }
         File::put($this->modelPath, $this->makeSubstitutions());
-        $this->line('Model created! Here is the URI to trigger the clearing of the cache for this model: '.$this->forgetUri);
+        $this->line("Model created! Here is a Google Apps script macro that will invalidate the cache whenver you edit your sheet:\n\n".$this->generateGoogleScript());
+
     }
 
     protected function getStub()
@@ -94,4 +97,19 @@ class MakeSheetModelCommand extends Command
     {
         $this->forgetUri = '/eloquent_sheets_forget/sushi-'.Str::kebab(stripslashes($this->fullyQualfiedModelName));
     }
+
+
+    protected function generateGoogleScript()
+    {
+        return 'function onEdit(e){
+            if (SpreadsheetApp.getActiveSheet().getSheetId() == 688412530) {
+                    UrlFetchApp.fetch("YOUR_WEBSITE/'. $this->forgetUri .'");
+                }
+            }
+        ';
+
+
+    }
+
 }
+
