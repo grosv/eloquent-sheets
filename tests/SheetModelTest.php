@@ -20,7 +20,6 @@ class SheetModelTest extends TestCase
     {
         parent::setUp();
         config(['sushi.cache-path' => $this->cachePath = __DIR__.'/cache']);
-
     }
 
     /** @test */
@@ -54,7 +53,6 @@ class SheetModelTest extends TestCase
 
         $sheet = TestModel::where('name', 'Milo')->first();
         $this->assertEquals('Kid', $sheet->title);
-
     }
 
     /** @test */
