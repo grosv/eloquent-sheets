@@ -1,0 +1,12 @@
+<?php
+
+namespace SHEET_MODEL_NAMESPACE;
+
+use Grosv\EloquentSheets\SheetModel;
+
+class SHEET_MODEL_NAME extends SheetModel
+{
+    protected $spreadsheetId = 'SPREADSHEET_ID';
+    protected $sheetId = 'SHEET_ID';
+    protected $headerRow = '1';
+}
