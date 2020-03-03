@@ -98,9 +98,10 @@ class MakeSheetModelCommand extends Command
 
     protected function generateGoogleScript()
     {
-        return 'function onEdit(e){
-            if (SpreadsheetApp.getActiveSheet().getSheetId() == 688412530) {
-                    UrlFetchApp.fetch("YOUR_WEBSITE/'.$this->forgetUri.'");
+        return '
+        function onEdit(e){
+            if (SpreadsheetApp.getActiveSheet().getSheetId() == '.$this->sheetId.') {
+                    UrlFetchApp.fetch("YOUR_WEBSITE'.$this->forgetUri.'");
                 }
             }
         ';

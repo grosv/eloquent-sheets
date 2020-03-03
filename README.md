@@ -5,6 +5,14 @@
 [![StyleCI](https://github.styleci.io/repos/244386505/shield?branch=master)](https://github.styleci.io/repos/244386505)
 ![Build Status](https://app.chipperci.com/projects/65d88e3d-ecf4-4ced-afd3-e5ba3593ce21/status/master)
 
+This package provides an Eloquent model that sits on top of a Google Sheet. In order for it to work, there are two things your sheet needs to have. One is a heading row that holds the name of your columns. This defaults to row 1 (the top row) but it can be any row in the sheet. The other is a primary key column. Eloquent assumes that your primary key column is named id. If it's not, set it in your model like you would normally.
+
+When you use this package, an initial invocation of the model will read the sheet and store each row as a record in a table inside a file-based sqlite database. Subsequent invocations of the model use that sqlite database so changes to the spreadsheet won't be reflected in the database. However, there are two ways that you can invalidate the sqlite cache and cause it to be recreated:
+
+1. You can call the invalidateCache() method on the model with something like like `YourGoogleSheetModel::first()->invalidateCache()` 
+
+2. A macro that you can attach to your Google sheet. The macro listens for edits within the sheet and when one happens, it sends a request to a route provided by this package that deletes the sqlite database forcing a fresh load the next time the model is used. 
+
 ### Installation
 ```shell script
 composer require grosv/eloquent-sheets
@@ -14,7 +22,35 @@ composer require grosv/eloquent-sheets
 This package relies on [revolution/laravel-google-sheets](https://github.com/kawax/laravel-google-sheets). You must handle the configuration for that package and its dependencies for this package to work. Follow the instructions in their readme (though you can skip the compoer require bit because I do that already in here).
 
 ### Usage
-Create a model for your Google sheet that extends Grosv\EloquentSheets\SheetModel. Here is the bare bones requirement to make it work:
+Consider the following Google Sheet. We want to lay an Eloquent model on top of it. 
+
+<img width="691" alt="Screen Shot 2020-03-03 at 3 02 15 PM" src="https://user-images.githubusercontent.com/1053395/75819454-5440d500-5d60-11ea-8f5b-0e4e04a39326.png">
+
+```shell script
+php artisan make:sheet-model
+```
+**Step 1 - Enter the full path to the directory where you want to create the model file (defaults to app_path()):** 
+
+<img width="820" alt="Screen Shot 2020-03-03 at 3 09 05 PM" src="https://user-images.githubusercontent.com/1053395/75819852-f3fe6300-5d60-11ea-8c67-7a46379caf05.png">
+---
+**Step 2 - Enter the name you want to use for your model class:**
+
+<img width="536" alt="Screen Shot 2020-03-03 at 3 11 10 PM" src="https://user-images.githubusercontent.com/1053395/75820030-3de74900-5d61-11ea-9cf2-84d2c6977cbb.png">
+---
+**Step 3 - Paste the edit url of your Google Sheet from the browser address bar:**
+
+<img width="816" alt="Screen Shot 2020-03-03 at 3 13 33 PM" src="https://user-images.githubusercontent.com/1053395/75820229-99b1d200-5d61-11ea-9d18-37372b108976.png">
+---
+**Step 4 - Confirm that the path and full classname look right:**
+
+<img width="1120" alt="Screen Shot 2020-03-03 at 3 14 47 PM" src="https://user-images.githubusercontent.com/1053395/75820325-c4038f80-5d61-11ea-987d-edac8e820caf.png">
+---
+**Step 5 - And you will receive the template of a macro that you can attach to your sheet that will tell your site that the sheet has changed so a new cache has to be built.**
+
+<img width="972" alt="Screen Shot 2020-03-03 at 3 20 58 PM" src="https://user-images.githubusercontent.com/1053395/75820796-a256d800-5d62-11ea-8cff-2b5c0d42efb3.png">
+---
+### The Resulting Model Class
+
 ```php
 use Grosv\EloquentSheets\SheetModel;
 
@@ -23,18 +59,14 @@ class YourGoogleSheetsModel extends SheetModel
     protected $spreadsheetId = '1HxNqqLtc614UVLoTLEItfvcdcOm3URBEM2Zkr36Z1rE'; // The id of the spreadsheet
     protected $sheetId = '0'; // The id of the sheet within the spreadsheet (gid=xxxxx on the URL)
     protected $headerRow = '1'; // The row containing the names of your columns (eg. id, name, email, phone)
-    public $cacheId = '39e93f4d-c20e-4874-88ee-2ddc403bd3de'; // A uuid that is used as a cache key
 }
 ```
 
+This model can do your basic Eloquent model stuff because it really is an Eloquent model. Though it's currently limited to read / list methods. Update and insert don't currently work because you do those things by editing your spreadsheet.
+
 ### What's Missing
-This works as it is but you have to do a great deal of work to set it up. Here are the missing pieces that I'll be adding over the next few days:
 
-1. An artisan command to create your model and interactively populate the required data.
-
-2. A Google Apps Script that you'll be able to use to have your sheet tell your site when its data has changed so that the cache can be forgotten and fresh data pulled from the sheet.
-
-3. Eventually I'd like to add insert and update methods that will let you append rows to your spreadsheet and edit existing rows.
+Eventually I'd like to add insert and update methods that will let you append rows to your spreadsheet and edit existing rows. I already have the most important part done... a method to invalidate the cache when we update or insert. Now I just need the update and insert methods.
 
 ### Acknowledgements
 This package wouldn't be possible without [Sushi](https://calebporzio/sushi) by Caleb Porzio. If you're not [sponsoring him on GitHub](https://github.com/sponsors/calebporzio) you should.
