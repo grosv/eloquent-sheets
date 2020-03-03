@@ -24,7 +24,7 @@ class MakeSheetModelCommandTest extends TestCase
             ->expectsQuestion('What do you want the class name of your new model to be?', 'MySheetModel')
             ->expectsQuestion('Copy and paste the full URL of your Google Sheet from your browser address bar:', 'https://docs.google.com/spreadsheets/d/1HxNqqLtc614UVLoTLEItfvcdcOm3URBEM2Zkr36Z1rE/edit#gid=688412530')
             ->expectsQuestion('We were unable to determine the namespace you want to use for your model. Please provide it:', 'Tests\Models')
-            ->expectsQuestion('Ready to write model Tests\\Models\\MySheetModel at '. __DIR__.'/Models/MySheetModel.php'.'?', 'yes')
+            ->expectsQuestion('Ready to write model Tests\\Models\\MySheetModel at '.__DIR__.'/Models/MySheetModel.php'.'?', 'yes')
             ->assertExitCode(0);
 
         $this->assertFileExists(__DIR__.'/Models/MySheetModel.php');
