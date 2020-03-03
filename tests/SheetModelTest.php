@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Tests\Models\TestModel;
 use Illuminate\Support\Facades\File;
+use Tests\Models\TestModel;
 
 class SheetModelTest extends TestCase
 {

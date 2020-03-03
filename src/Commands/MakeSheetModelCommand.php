@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Grosv\EloquentSheets\Commands;
-
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -10,8 +8,8 @@ use Illuminate\Support\Str;
 
 class MakeSheetModelCommand extends Command
 {
-    /** @var string  */
-    protected $signature = "make:sheet-model";
+    /** @var string */
+    protected $signature = 'make:sheet-model';
     /** @var string */
     private $modelPath;
     /** @var string */
@@ -31,7 +29,6 @@ class MakeSheetModelCommand extends Command
     /** @var string */
     private $forgetUri;
 
-
     public function handle()
     {
         $this->modelPath = $this->ask('Where would you like to create your sheet model?', config('eloquent-sheets.app_path'));
@@ -43,15 +40,14 @@ class MakeSheetModelCommand extends Command
         if (is_null($this->modelNamespace)) {
             $this->modelNamespace = $this->ask('We were unable to determine the namespace you want to use for your model. Please provide it:');
         }
-        $this->fullyQualfiedModelName = $this->modelNamespace . '\\' . $this->modelName;
-        $this->modelPath .= '/' . $this->modelName . '.php';
+        $this->fullyQualfiedModelName = $this->modelNamespace.'\\'.$this->modelName;
+        $this->modelPath .= '/'.$this->modelName.'.php';
         $this->calculateForgetUri();
-        if (!$this->confirm('Ready to write model '. $this->fullyQualfiedModelName . ' at ' . $this->modelPath . '?')) {
+        if (!$this->confirm('Ready to write model '.$this->fullyQualfiedModelName.' at '.$this->modelPath.'?')) {
             return;
         }
         File::put($this->modelPath, $this->makeSubstitutions());
-        $this->line('Model created! Here is the URI to trigger the clearing of the cache for this model: '. $this->forgetUri);
-
+        $this->line('Model created! Here is the URI to trigger the clearing of the cache for this model: '.$this->forgetUri);
     }
 
     protected function getStub()
@@ -71,6 +67,7 @@ class MakeSheetModelCommand extends Command
     {
         if ($this->modelPath === app_path()) {
             $this->modelNamespace = 'App';
+
             return;
         }
         $diff = str_replace(app_path(), '', $this->modelPath);
@@ -80,7 +77,8 @@ class MakeSheetModelCommand extends Command
             foreach ($diffArray as $part) {
                 array_push($studlyArray, Str::studly($part));
             }
-            $this->modelNamespace = join('\\', $studlyArray);
+            $this->modelNamespace = implode('\\', $studlyArray);
+
             return;
         }
     }
@@ -96,5 +94,4 @@ class MakeSheetModelCommand extends Command
     {
         $this->forgetUri = '/eloquent_sheets_forget/sushi-'.Str::kebab(stripslashes($this->fullyQualfiedModelName));
     }
-
 }
