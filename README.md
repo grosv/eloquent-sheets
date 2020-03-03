@@ -32,23 +32,33 @@ php artisan make:sheet-model
 **Step 1 - Enter the full path to the directory where you want to create the model file (defaults to app_path()):** 
 
 <img width="820" alt="Screen Shot 2020-03-03 at 3 09 05 PM" src="https://user-images.githubusercontent.com/1053395/75819852-f3fe6300-5d60-11ea-8c67-7a46379caf05.png">
+
 ---
+
 **Step 2 - Enter the name you want to use for your model class:**
 
 <img width="536" alt="Screen Shot 2020-03-03 at 3 11 10 PM" src="https://user-images.githubusercontent.com/1053395/75820030-3de74900-5d61-11ea-9cf2-84d2c6977cbb.png">
+
 ---
+
 **Step 3 - Paste the edit url of your Google Sheet from the browser address bar:**
 
 <img width="816" alt="Screen Shot 2020-03-03 at 3 13 33 PM" src="https://user-images.githubusercontent.com/1053395/75820229-99b1d200-5d61-11ea-9d18-37372b108976.png">
+
 ---
+
 **Step 4 - Confirm that the path and full classname look right:**
 
 <img width="1120" alt="Screen Shot 2020-03-03 at 3 14 47 PM" src="https://user-images.githubusercontent.com/1053395/75820325-c4038f80-5d61-11ea-987d-edac8e820caf.png">
+
 ---
+
 **Step 5 - And you will receive the template of a macro that you can attach to your sheet that will tell your site that the sheet has changed so a new cache has to be built.**
 
 <img width="972" alt="Screen Shot 2020-03-03 at 3 20 58 PM" src="https://user-images.githubusercontent.com/1053395/75820796-a256d800-5d62-11ea-8cff-2b5c0d42efb3.png">
+
 ---
+
 ### The Resulting Model Class
 
 ```php
