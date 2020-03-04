@@ -19,7 +19,7 @@ composer require grosv/eloquent-sheets
 ```
 
 ### Configuration
-This package relies on [revolution/laravel-google-sheets](https://github.com/kawax/laravel-google-sheets). You must handle the configuration for that package and its dependencies for this package to work. Follow the instructions in their readme (though you can skip the compoer require bit because I do that already in here).
+This package relies on [revolution/laravel-google-sheets](https://github.com/kawax/laravel-google-sheets). You must handle the configuration for that package and its dependencies for this package to work. Follow the instructions in their readme (though you can skip the composer require bit because I do that already in here).
 
 ### Usage
 Consider the following Google Sheet. We want to lay an Eloquent model on top of it. 
