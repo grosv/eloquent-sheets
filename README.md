@@ -59,6 +59,18 @@ php artisan make:sheet-model
 
 ---
 
+You can use something like this to enable the macro generated on your sheet as an [installable trigger](https://developers.google.com/apps-script/guides/triggers/installable):
+
+```javascript
+function createSpreadsheetOpenTrigger() {
+  var ss = SpreadsheetApp.getActive();
+  ScriptApp.newTrigger('onEdit')
+      .forSpreadsheet(ss)
+      .onEdit()
+      .create();
+}
+```
+
 ### The Resulting Model Class
 
 ```php
