@@ -61,7 +61,8 @@ class MakeSheetModelCommand extends Command
         return str_replace(
             ['SHEET_MODEL_NAMESPACE', 'SHEET_MODEL_NAME', 'SPREADSHEET_ID', 'SHEET_ID'],
             [$this->modelNamespace, $this->modelName, $this->spreadsheetId, $this->sheetId],
-            $this->stub);
+            $this->stub
+        );
     }
 
     protected function modelPathToNamespace(): void
