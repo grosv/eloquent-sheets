@@ -91,4 +91,4 @@ This model can do your basic Eloquent model stuff because it really is an Eloque
 Eventually I'd like to add insert and update methods that will let you append rows to your spreadsheet and edit existing rows. I already have the most important part done... a method to invalidate the cache when we update or insert. Now I just need the update and insert methods.
 
 ### Acknowledgements
-This package wouldn't be possible without [Sushi](https://calebporzio/sushi) by Caleb Porzio. If you're not [sponsoring him on GitHub](https://github.com/sponsors/calebporzio) you should.
+This package wouldn't be possible without [Sushi](https://github.com/calebporzio/sushi) by Caleb Porzio. If you're not [sponsoring him on GitHub](https://github.com/sponsors/calebporzio) you should.
