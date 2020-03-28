@@ -58,12 +58,9 @@ class SheetModel extends Model
         $rows = collect([]);
 
         $sheet->each(function ($row) use ($headers, $rows, &$inferId) {
-
             if ($inferId) {
                 $row[] = $inferId++;
             }
-
-
 
             $rows->push($headers->combine($row));
         });

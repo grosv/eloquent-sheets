@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Validation\Rules\In;
 use Tests\Models\InferredIdModel;
 use Tests\Models\TestModel;
 
