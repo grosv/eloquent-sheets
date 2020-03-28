@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rules\In;
+use Tests\Models\InferredIdModel;
 use Tests\Models\TestModel;
 
 class SheetModelTest extends TestCase
@@ -53,6 +55,13 @@ class SheetModelTest extends TestCase
 
         $sheet = TestModel::where('name', 'Milo')->first();
         $this->assertEquals('Kid', $sheet->title);
+    }
+
+    /** @test */
+    public function can_infer_id_from_row()
+    {
+        $sheet = InferredIdModel::all();
+        $this->assertEquals('[{"name":"Ed","email":"ed@gros.co","id":1},{"name":"Justine","email":"justine@gros.co","id":2},{"name":"Daniel","email":"daniel@gros.co","id":3},{"name":"Milo","email":"milo@gros.co","id":4}]', $sheet->toJson());
     }
 
     /** @test */

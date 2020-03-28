@@ -44,14 +44,27 @@ class SheetModel extends Model
         $client->setScopes([Google_Service_Sheets::DRIVE, Google_Service_Sheets::SPREADSHEETS]);
         $service = new \Google_Service_Sheets($client);
         $sheets->setService($service);
+        $inferId = 0;
 
         $sheet = $sheets->spreadsheet($this->spreadsheetId)->sheetById($this->sheetId)->get();
 
         $headers = collect($sheet->pull($this->headerRow - 1));
 
+        if (!$headers->contains($this->primaryKey)) {
+            $headers->push($this->primaryKey);
+            $inferId = 1;
+        }
+
         $rows = collect([]);
 
-        $sheet->each(function ($row) use ($headers, $rows) {
+        $sheet->each(function ($row) use ($headers, $rows, &$inferId) {
+
+            if ($inferId) {
+                $row[] = $inferId++;
+            }
+
+
+
             $rows->push($headers->combine($row));
         });
 
