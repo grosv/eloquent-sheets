@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\File;
+use Tests\Models\DefineHeadersModel;
 use Tests\Models\InferredIdModel;
 use Tests\Models\TestModel;
 
@@ -61,6 +62,16 @@ class SheetModelTest extends TestCase
     {
         $sheet = InferredIdModel::all();
         $this->assertEquals('[{"name":"Ed","email":"ed@gros.co","id":1},{"name":"Justine","email":"justine@gros.co","id":2},{"name":"Daniel","email":"daniel@gros.co","id":3},{"name":"Milo","email":"milo@gros.co","id":4}]', $sheet->toJson());
+    }
+
+    /** @test */
+    public function can_use_defined_headers()
+    {
+        $sheet = DefineHeadersModel::find(1);
+
+        $this->assertEquals('Ed', $sheet->name);
+
+
     }
 
     /** @test */

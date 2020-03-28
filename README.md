@@ -5,7 +5,7 @@
 [![StyleCI](https://github.styleci.io/repos/244386505/shield?branch=master)](https://github.styleci.io/repos/244386505)
 ![Build Status](https://app.chipperci.com/projects/65d88e3d-ecf4-4ced-afd3-e5ba3593ce21/status/master)
 
-This package provides an Eloquent model that sits on top of a Google Sheet. In order for it to work, there are two things your sheet needs to have. One is a heading row that holds the name of your columns. This defaults to row 1 (the top row) but it can be any row in the sheet. The other is a primary key column. Eloquent assumes that your primary key column is named id. If it's not, set it in your model like you would normally.
+This package provides an Eloquent model that sits on top of a Google Sheet. You can use a heading row that holds the name of your columns. This defaults to row 1 (the top row) but it can be any row in the sheet. Or you can define an array of headings in your model. If you choose not to have a primary key column in your spreadsheet, each column will get an id (or whatever you're calling your primary key column in your model) auto-incremented.
 
 When you use this package, an initial invocation of the model will read the sheet and store each row as a record in a table inside a file-based sqlite database. Subsequent invocations of the model use that sqlite database so changes to the spreadsheet won't be reflected in the database. However, there are two ways that you can invalidate the sqlite cache and cause it to be recreated:
 

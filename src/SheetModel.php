@@ -19,6 +19,7 @@ class SheetModel extends Model
     protected $headerRow;
     public $primaryKey = 'id';
     public $cacheName;
+    protected $headers;
 
     public function __construct()
     {
@@ -48,7 +49,7 @@ class SheetModel extends Model
 
         $sheet = $sheets->spreadsheet($this->spreadsheetId)->sheetById($this->sheetId)->get();
 
-        $headers = collect($sheet->pull($this->headerRow - 1));
+        $headers = is_array($this->headers) ? collect($this->headers) : collect($sheet->pull($this->headerRow - 1));
 
         if (!$headers->contains($this->primaryKey)) {
             $headers->push($this->primaryKey);
