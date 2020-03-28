@@ -70,8 +70,6 @@ class SheetModelTest extends TestCase
         $sheet = DefineHeadersModel::find(1);
 
         $this->assertEquals('Ed', $sheet->name);
-
-
     }
 
     /** @test */
