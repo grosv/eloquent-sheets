@@ -63,6 +63,13 @@ class SheetModel extends Model
                 $row[] = $inferId++;
             }
 
+            // append empty cols inside the row to match the number of cols in header
+            foreach ($headers as $index => $header) {
+                if (! isset($row[$index])) {
+                    $row[$index] = "";
+                }
+            }
+            
             $rows->push($headers->combine($row));
         });
 
