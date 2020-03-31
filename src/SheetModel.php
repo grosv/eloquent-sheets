@@ -35,6 +35,9 @@ class SheetModel extends Model
 
     public function invalidateCache()
     {
+        if (!file_exists(config('sushi.cache-path').'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite')) {
+            return;
+        }
         unlink(config('sushi.cache-path').'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite');
     }
 
