@@ -65,11 +65,11 @@ class SheetModel extends Model
 
             // append empty cols inside the row to match the number of cols in header
             foreach ($headers as $index => $header) {
-                if (! isset($row[$index])) {
-                    $row[$index] = "";
+                if (!isset($row[$index])) {
+                    $row[$index] = '';
                 }
             }
-            
+
             $rows->push($headers->combine($row));
         });
 
