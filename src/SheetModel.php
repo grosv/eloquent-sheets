@@ -76,6 +76,16 @@ class SheetModel extends Model
         return $rows->toArray();
     }
 
+    public function getSheetId()
+    {
+        return $this->sheetId;
+    }
+
+    public function getSpreadsheetId()
+    {
+        return $this->spreadsheetId;
+    }
+
     public function getCacheName()
     {
         return !is_null($this->getConnection()) ? explode('.', basename($this->getConnection()->getDatabaseName()))[0] : null;
