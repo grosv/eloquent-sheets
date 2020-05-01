@@ -1,11 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
+use Grosv\EloquentSheets\ForgetSheet;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/eloquent_sheets_forget/{id?}', function (Request $request, $id) {
-    File::delete(config('sushi.cache-path').'/'.$id.'.sqlite');
-
-    return response()->noContent();
-});
+Route::get('/eloquent_sheets_forget/{id?}', [ForgetSheet::class, 'execute']);
