@@ -5,6 +5,7 @@ namespace Grosv\EloquentSheets;
 use Google_Client;
 use Google_Service_Sheets;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Revolution\Google\Sheets\Sheets;
 use Sushi\Sushi;
@@ -19,29 +20,33 @@ class SheetModel extends Model
     protected $headerRow;
     public $primaryKey = 'id';
     public $cacheName;
+    private $cacheDirectory;
     protected $headers;
 
     public function __construct()
     {
         parent::__construct();
-        $this->cacheDirectory = realpath(config('sushi.cache-path', storage_path('framework/cache')));
+        $this->cacheDirectory = File::isDirectory(config('sushi.cache-path', storage_path('framework/cache'))) ?
+            config('sushi.cache-path', storage_path('framework/cache')) :
+            File::makeDirectory(config('sushi.cache-path', storage_path('framework/cache')));
+
         $this->cacheName = $this->getCacheName();
     }
 
     public function getRows()
     {
-        return !empty($this->rows) ? $this->rows : $this->loadFromSheet();
+        return ! empty($this->rows) ? $this->rows : $this->loadFromSheet();
     }
 
     public function invalidateCache()
     {
-        if (!file_exists(config('sushi.cache-path').'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite')) {
+        if (! file_exists($this->cacheDirectory.'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite')) {
             return;
         }
-        unlink(config('sushi.cache-path').'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite');
+        unlink($this->cacheDirectory.'/'.config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite');
     }
 
-    public function loadFromSheet(): array
+    public function loadFromSheet(): ?array
     {
         $sheets = new Sheets();
         $client = new Google_Client(config('google'));
@@ -50,11 +55,16 @@ class SheetModel extends Model
         $sheets->setService($service);
         $inferId = 0;
 
-        $sheet = $sheets->spreadsheet($this->spreadsheetId)->sheetById($this->sheetId)->get();
+        try {
+            $sheet = $sheets->spreadsheet($this->spreadsheetId)->sheetById($this->sheetId)->get();
+        } catch (\Exception $e) {
+            $this->invalidateCache();
+            throw $e;
+        }
 
         $headers = is_array($this->headers) ? collect($this->headers) : collect($sheet->pull($this->headerRow - 1));
 
-        if (!$headers->contains($this->primaryKey)) {
+        if (! $headers->contains($this->primaryKey)) {
             $headers->push($this->primaryKey);
             $inferId = 1;
         }
@@ -62,18 +72,18 @@ class SheetModel extends Model
         $rows = collect([]);
 
         $sheet->each(function ($row) use ($headers, $rows, &$inferId) {
-            if ($inferId) {
-                $row[] = $inferId++;
-            }
+            $record = [];
 
             // append empty cols inside the row to match the number of cols in header
             foreach ($headers as $index => $header) {
-                if (!isset($row[$index])) {
-                    $row[$index] = '';
-                }
+                $record[$header] = $row[$index] ?? '';
             }
 
-            $rows->push($headers->combine($row));
+            if ($inferId) {
+                $record[$this->primaryKey] = $inferId++;
+            }
+
+            $rows->push($headers->combine($record));
         });
 
         return $rows->toArray();
@@ -91,6 +101,6 @@ class SheetModel extends Model
 
     public function getCacheName()
     {
-        return !is_null($this->getConnection()) ? explode('.', basename($this->getConnection()->getDatabaseName()))[0] : null;
+        return ! is_null($this->getConnection()) ? explode('.', basename($this->getConnection()->getDatabaseName()))[0] : null;
     }
 }

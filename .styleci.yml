@@ -1,0 +1,11 @@
+risky: true
+version: 7
+preset: laravel
+finder:
+  exclude:
+    - "config"
+    - "vendor"
+  name: "*.php"
+  not-name:
+    - "*.blade.php"
+    - "_ide_helper.php"

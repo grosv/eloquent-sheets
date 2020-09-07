@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Tests\Models\BrokenModel;
 use Tests\Models\DefineHeadersModel;
 use Tests\Models\InferredIdModel;
 use Tests\Models\TestModel;
@@ -20,7 +21,7 @@ class SheetModelTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        config(['sushi.cache-path' => $this->cachePath = __DIR__.'/cache']);
+        config(['sushi.cache-path' => __DIR__.'/cache']);
     }
 
     public function tearDown(): void
@@ -32,6 +33,22 @@ class SheetModelTest extends TestCase
     private function clearCacheDirectory()
     {
         array_map('unlink', glob(config('sushi.cache-path').'/*'));
+    }
+
+    /** @test */
+    public function can_infer_id_from_row()
+    {
+        $sheet = InferredIdModel::all();
+        $this->assertEquals('[{"name":"Ed","email":"ed@gros.co","id":1},{"name":"Justine","email":"justine@gros.co","id":2},{"name":"Bob","email":"","id":3},{"name":"Daniel","email":"daniel@gros.co","id":4},{"name":"Milo","email":"milo@gros.co","id":5}]', $sheet->toJson());
+    }
+
+    /** @test */
+    public function will_bail_out_without_creating_cache_file_if_error_reading_sheet()
+    {
+        $this->assertFileDoesNotExist('tests/cache/sushi-tests-models-broken-model.sqlite');
+        $this->expectException('Google_Service_Exception');
+        $sheet = BrokenModel::all();
+        $this->assertFileDoesNotExist('tests/cache/sushi-tests-models-broken-model.sqlite');
     }
 
     /** @test */
@@ -65,13 +82,6 @@ class SheetModelTest extends TestCase
 
         $sheet = TestModel::where('name', 'Milo')->first();
         $this->assertEquals('Kid', $sheet->title);
-    }
-
-    /** @test */
-    public function can_infer_id_from_row()
-    {
-        $sheet = InferredIdModel::all();
-        $this->assertEquals('[{"name":"Ed","email":"ed@gros.co","id":1},{"name":"Justine","email":"justine@gros.co","id":2},{"name":"Daniel","email":"daniel@gros.co","id":3},{"name":"Milo","email":"milo@gros.co","id":4}]', $sheet->toJson());
     }
 
     /** @test */

@@ -44,7 +44,7 @@ class MakeSheetModelCommand extends Command
         $this->modelPath .= '/'.$this->modelName.'.php';
         $this->calculateForgetUri();
 
-        if (!$this->confirm('Ready to write model '.$this->fullyQualfiedModelName.' at '.$this->modelPath.'?')) {
+        if (! $this->confirm('Ready to write model '.$this->fullyQualfiedModelName.' at '.$this->modelPath.'?')) {
             return;
         }
         File::put($this->modelPath, $this->makeSubstitutions());

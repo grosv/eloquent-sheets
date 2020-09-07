@@ -13,13 +13,14 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.3",
-        "illuminate/support": "^6.0|^7.0",
+        "illuminate/support": ">=6.0",
         "revolution/laravel-google-sheets": "^5.0",
         "calebporzio/sushi": "^2.0",
         "ext-json": "*"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.6"
+        "orchestra/testbench": "^5.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "autoload": {
         "psr-4": {
@@ -36,5 +37,13 @@
         "laravel": {
             "providers": "Grosv\\EloquentSheets\\EloquentSheetsProvider"
         }
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix -v",
+        "test:unit": "phpunit",
+        "test": [
+            "@lint",
+            "@test:unit"
+        ]
     }
 }
