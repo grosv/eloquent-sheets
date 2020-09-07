@@ -36,6 +36,6 @@ class MakeSheetModelCommandTest extends TestCase
         $this->assertFileExists('tests/cache/sushi-tests-models-my-sheet-model.sqlite');
 
         $work->first()->invalidateCache();
-        $this->assertFileNotExists('tests/cache/sushi-tests-models-my-sheet-model.sqlite');
+        $this->assertFileDoesNotExist('tests/cache/sushi-tests-models-my-sheet-model.sqlite');
     }
 }
